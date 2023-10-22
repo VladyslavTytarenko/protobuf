@@ -3,15 +3,21 @@ syntax = "proto3";
 option java_multiple_files = true;
 option java_package = "com.spirit.models";
 
-/**
- Person message
- */
+message Address {
+  int32 postbox = 1;
+  string street = 2;
+  string city = 3;
+}
+
+message Car {
+  string make = 1;
+  string model = 2;
+  int32 year = 3;
+}
 
 message Person {
-
-  // Name field
   string name = 1;
-
-  // Age field
   int32 age = 2;
+  Address address = 3;
+  Car car = 4;
 }
