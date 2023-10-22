@@ -3,7 +3,15 @@ syntax = "proto3";
 option java_multiple_files = true;
 option java_package = "com.spirit.models";
 
+/**
+ Person message
+ */
+
 message Person {
+
+  // Name field
   string name = 1;
+
+  // Age field
   int32 age = 2;
 }
