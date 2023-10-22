@@ -3,7 +3,7 @@ package com.spirit.protobuf;
 import com.spirit.models.Car;
 import com.spirit.models.Dealer;
 
-import java.util.Map;
+import static com.spirit.models.BodyStyle.SEDAN;
 
 public class MapDemo {
     public static void main(String[] args) {
@@ -18,6 +18,7 @@ public class MapDemo {
                 .setMake("Audi")
                 .setModel("A3")
                 .setYear(20)
+                .setBodyStyle(SEDAN)
                 .build();
 
         Dealer dealer = Dealer.newBuilder()
@@ -25,6 +26,6 @@ public class MapDemo {
                 .putModel(2012, audi)
                 .build();
 
-        System.out.println(dealer.getModelMap());
+        System.out.println(dealer.getModelOrThrow(2005).getBodyStyle());
     }
 }
