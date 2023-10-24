@@ -6,9 +6,13 @@ import com.spirit.json.JPerson;
 import com.spirit.models.Person;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PerformanceTest {
     public static void main(String[] args) {
+
+        AtomicInteger protobufBytesLength = new AtomicInteger();
+        AtomicInteger jsonBytesLength = new AtomicInteger();
 
         // JSON
         JPerson personJson = new JPerson();
@@ -19,6 +23,7 @@ public class PerformanceTest {
         Runnable runnableJson = () -> {
             try {
                 byte[] bytes = mapper.writeValueAsBytes(personJson);
+                jsonBytesLength.set(bytes.length);
                 JPerson deserializedPersonJson = mapper.readValue(bytes, JPerson.class);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -34,16 +39,18 @@ public class PerformanceTest {
         Runnable runnableProtobuf = () -> {
             try {
                 byte[] protobufBytes = personProtobuf.toByteArray();
+                protobufBytesLength.set(protobufBytes.length);
                 Person deserializedPersonProtobuf = Person.parseFrom(protobufBytes);
             } catch (InvalidProtocolBufferException e) {
                 throw new RuntimeException(e);
             }
         };
 
-        for (int i = 0; i < 5; i++) {
-            runPerformanceTest(runnableJson, "JSON");
-            runPerformanceTest(runnableProtobuf, "PROTOBUF");
-        }
+        runPerformanceTest(runnableJson, "JSON");
+          runPerformanceTest(runnableProtobuf, "PROTOBUF");
+
+        System.out.println(jsonBytesLength);
+        System.out.println(protobufBytesLength);
     }
 
     private static void runPerformanceTest(Runnable runnable, String method) {
